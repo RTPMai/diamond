@@ -47,15 +47,17 @@ OUT = "site"
 
 CSS = """
 :root{
-  --ink:#14242E;
-  --ink-2:#1C3140;
-  --steel:#2A4150;
-  --paper:#EDEFF0;
+  --ink:#000000;
+  --ink-2:#0A0A0A;
+  --steel:#33393B;
+  --paper:#FFFFFF;
+  --shade:#F1F4F5;
   --white:#FFFFFF;
-  --orange:#F04E23;
-  --muted:#8399A5;
-  --line:rgba(255,255,255,.14);
-  --line-dark:rgba(20,36,46,.16);
+  --brand:#54C0E8;
+  --brand-dark:#33A8D2;
+  --muted:#9AA7AC;
+  --line:rgba(255,255,255,.18);
+  --line-dark:rgba(0,0,0,.14);
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
@@ -78,59 +80,64 @@ a{color:inherit}
 .band{
   height:14px;
   background:repeating-linear-gradient(
-    -45deg, var(--orange) 0 14px, var(--ink) 14px 28px
+    -45deg, var(--brand) 0 14px, var(--ink) 14px 28px
   );
 }
 
 /* header --------------------------------------------------------------- */
 header{background:var(--ink);color:var(--white)}
 .bar{display:flex;align-items:center;gap:24px;padding:18px 0;flex-wrap:wrap}
-.mark{
-  font-weight:800;letter-spacing:-.02em;font-size:20px;line-height:1;
-  text-decoration:none;display:flex;align-items:center;gap:9px;
-}
-.mark span{color:var(--orange)}
+.mark{display:block;line-height:0;flex:0 0 auto}
+.mark img{width:206px;height:auto}
+.mark .alt{position:absolute;left:-9999px}
+@media (max-width:760px){.mark img{width:164px}}
 nav{margin-left:auto;display:flex;align-items:center;gap:26px;flex-wrap:wrap}
 nav a{
   text-decoration:none;font-size:15px;font-weight:500;color:var(--paper);
   padding:4px 0;border-bottom:2px solid transparent;
 }
-nav a:hover,nav a:focus-visible{border-bottom-color:var(--orange)}
-nav a[aria-current="page"]{border-bottom-color:var(--orange)}
+nav a:hover,nav a:focus-visible{border-bottom-color:var(--brand)}
+nav a[aria-current="page"]{border-bottom-color:var(--brand)}
 .calllink{font-weight:700;color:var(--white);white-space:nowrap}
 
 /* buttons -------------------------------------------------------------- */
 .btn{
-  display:inline-block;background:var(--orange);color:var(--white);
-  text-decoration:none;font-weight:700;font-size:16px;
+  display:inline-block;background:var(--brand);color:var(--ink);
+  text-decoration:none;font-weight:800;font-size:16px;
   padding:15px 26px;border:0;letter-spacing:.01em;
 }
-.btn:hover,.btn:focus-visible{background:#D33F16}
+.btn:hover,.btn:focus-visible{background:var(--brand-dark)}
 .btn-ghost{
   display:inline-block;text-decoration:none;font-weight:700;font-size:16px;
   padding:14px 25px;border:2px solid currentColor;color:var(--white);
 }
 .btn-ghost:hover,.btn-ghost:focus-visible{background:rgba(255,255,255,.1)}
-a:focus-visible,button:focus-visible{outline:3px solid var(--orange);outline-offset:3px}
+a:focus-visible,button:focus-visible{outline:3px solid var(--brand);outline-offset:3px}
 
 /* hero ----------------------------------------------------------------- */
 .hero{background:var(--ink);color:var(--white);padding:76px 0 68px}
 .hero h1{
   font-size:clamp(52px,12.5vw,138px);
-  font-weight:800;line-height:.86;letter-spacing:-.035em;
+  font-weight:800;font-style:italic;line-height:.86;letter-spacing:-.03em;
   margin:0;text-transform:uppercase;
 }
+.hero h1::after{content:"";display:block;width:min(560px,74%);height:9px;
+  background:var(--brand);margin:30px 0 0}
 .hero .sub{
-  margin:26px 0 0;max-width:34ch;font-size:clamp(18px,2.2vw,22px);
-  color:var(--paper);line-height:1.45;
+  margin:28px 0 0;max-width:36ch;font-size:clamp(19px,2.3vw,24px);
+  color:var(--white);line-height:1.35;font-weight:500;
+}
+.hero .tag{
+  margin:8px 0 0;font-size:clamp(17px,2vw,21px);color:var(--brand);
+  font-weight:700;letter-spacing:-.01em;
 }
 .hero .acts{display:flex;gap:14px;margin-top:34px;flex-wrap:wrap}
 
 /* page head for interior pages ----------------------------------------- */
 .phead{background:var(--ink);color:var(--white);padding:56px 0 50px}
 .phead h1{
-  font-size:clamp(38px,6.5vw,68px);font-weight:800;line-height:.95;
-  letter-spacing:-.03em;margin:0;text-transform:uppercase;
+  font-size:clamp(38px,6.5vw,68px);font-weight:800;font-style:italic;
+  line-height:.95;letter-spacing:-.025em;margin:0;text-transform:uppercase;
 }
 .phead p{margin:18px 0 0;max-width:52ch;color:var(--paper);font-size:18px}
 
@@ -138,6 +145,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--orange);outline-off
 section{padding:66px 0}
 section.tight{padding:48px 0}
 section.dark{background:var(--ink);color:var(--white)}
+section.shade{background:var(--shade)}
 h2{
   font-size:clamp(27px,3.6vw,40px);font-weight:800;letter-spacing:-.02em;
   line-height:1.08;margin:0 0 22px;
@@ -166,31 +174,32 @@ section.dark .reason p{color:var(--paper)}
 .steps li:last-child{border-left-color:transparent;padding-bottom:0}
 .steps li::before{
   content:counter(s);position:absolute;left:-21px;top:-4px;
-  width:40px;height:40px;background:var(--orange);color:var(--white);
+  width:40px;height:40px;background:var(--brand);color:var(--white);
   font-weight:800;font-size:18px;display:grid;place-items:center;
 }
 .steps h3{margin:6px 0 6px}
 .steps p{margin:0;color:var(--steel)}
 
 /* price slab ----------------------------------------------------------- */
-.slab{background:var(--ink);color:var(--white);padding:44px;max-width:560px}
+.slab{background:var(--ink);color:var(--white);padding:44px;max-width:560px;
+  border-bottom:9px solid var(--brand)}
 .slab .size{font-size:20px;font-weight:700;margin:0}
 .slab .fig{
-  font-size:clamp(66px,13vw,104px);font-weight:800;line-height:.9;
-  letter-spacing:-.04em;margin:10px 0 0;
+  font-size:clamp(66px,13vw,104px);font-weight:800;font-style:italic;
+  line-height:.9;letter-spacing:-.035em;margin:10px 0 0;color:var(--brand);
 }
 .slab .per{font-size:17px;color:var(--muted);margin:10px 0 0}
 .slab .dims{margin:22px 0 0;color:var(--paper);font-size:16px}
 .slab .btn{margin-top:28px}
 
-.note{border-left:3px solid var(--orange);padding:4px 0 4px 20px;margin:34px 0 0}
+.note{border-left:3px solid var(--brand);padding:4px 0 4px 20px;margin:34px 0 0}
 .note p{margin:0}
 
 /* service list --------------------------------------------------------- */
 .jobs{margin:34px 0 0;padding:0;list-style:none;
   display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;
   background:var(--line-dark)}
-.jobs li{background:var(--paper);padding:26px 24px 28px}
+.jobs li{background:var(--white);padding:26px 24px 28px}
 .jobs p{margin:0;color:var(--steel);font-size:16px}
 
 /* towns ---------------------------------------------------------------- */
@@ -207,7 +216,7 @@ section.dark .reason p{color:var(--paper)}
   list-style:none;display:flex;justify-content:space-between;gap:20px;
 }
 .faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:"+";color:var(--orange);font-weight:800}
+.faq summary::after{content:"+";color:var(--brand);font-weight:800}
 .faq details[open] summary::after{content:"\\2013"}
 .faq .ans{padding:0 0 22px;color:var(--steel)}
 .faq .ans p{margin:0 0 10px}
@@ -230,7 +239,7 @@ footer .fnav{display:flex;gap:20px;flex-wrap:wrap}
 /* sticky call bar, mobile only ----------------------------------------- */
 .callbar{
   position:fixed;left:0;right:0;bottom:0;z-index:20;display:none;
-  background:var(--orange);color:var(--white);text-decoration:none;
+  background:var(--brand);color:var(--white);text-decoration:none;
   font-weight:800;font-size:18px;text-align:center;padding:16px 0;
 }
 @media (max-width:760px){
@@ -245,7 +254,7 @@ footer .fnav{display:flex;gap:20px;flex-wrap:wrap}
   *{animation:none !important;transition:none !important}
 }
 .skip{position:absolute;left:-9999px}
-.skip:focus{left:24px;top:12px;position:fixed;z-index:50;background:var(--orange);
+.skip:focus{left:24px;top:12px;position:fixed;z-index:50;background:var(--brand);
   color:#fff;padding:12px 18px;font-weight:700}
 """
 
@@ -269,6 +278,8 @@ BUSINESS_SCHEMA = {
     "areaServed": [
         {"@type": "City", "name": t, "addressRegion": "IA"} for t in SERVICE_AREA
     ],
+    "logo": SITE_URL + "/assets/logo.svg",
+    "image": SITE_URL + "/assets/og.png",
     "priceRange": "$$",
     "makesOffer": {
         "@type": "Offer",
@@ -339,10 +350,14 @@ def page(path, title, description, body, schema_extra=None, current=None):
 <meta property="og:description" content="{description}">
 <meta property="og:url" content="{canonical}">
 <meta name="twitter:card" content="summary">
-<meta name="theme-color" content="#14242E">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<meta property="og:image" content="{site}/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,700;0,800;1,800&display=swap" rel="stylesheet">
 <style>{css}</style>
 {schema}
 </head>
@@ -350,7 +365,9 @@ def page(path, title, description, body, schema_extra=None, current=None):
 <a class="skip" href="#main">Skip to content</a>
 <header>
   <div class="wrap bar">
-    <a class="mark" href="/">Diamond <span>Dumpster</span> Solutions</a>
+    <a class="mark" href="/" aria-label="Diamond Dumpster Solutions, home">
+      <img src="/assets/logo.svg" width="1491" height="535" alt="Diamond Dumpster Solutions">
+    </a>
     <nav>{nav}</nav>
   </div>
 </header>
@@ -362,7 +379,7 @@ def page(path, title, description, body, schema_extra=None, current=None):
 <footer>
   <div class="wrap fgrid">
     <div>
-      <p style="margin:0 0 6px"><strong style="color:var(--white)">{business}</strong></p>
+      <img src="/assets/logo.svg" width="1491" height="535" alt="{business}" style="width:188px;height:auto;margin:0 0 14px">
       <p style="margin:0">Roll-off dumpster rental, Des Moines metro.<br>
       <a href="tel:{tel}">{phone_spoken}</a></p>
     </div>
@@ -376,6 +393,7 @@ def page(path, title, description, body, schema_extra=None, current=None):
         title=title,
         description=description,
         canonical=canonical,
+        site=SITE_URL,
         business=BUSINESS,
         css=CSS,
         schema=jsonld(*nodes),
@@ -423,7 +441,8 @@ def home():
 <div class="hero">
   <div class="wrap">
     <h1>We love<br>a good dump.</h1>
-    <p class="sub">Roll-off dumpsters delivered across the Des Moines metro. One price, one week, no surprises.</p>
+    <p class="sub">Des Moines' premier roll-off dumpster service.</p>
+    <p class="tag">Reliable. Efficient. Affordable.</p>
     <div class="acts">
       <a class="btn" href="{book}">{book_label}</a>
       <a class="btn-ghost" href="tel:{tel}">Call {phone}</a>
@@ -460,7 +479,7 @@ def home():
   </div>
 </section>
 
-<section>
+<section class="shade">
   <div class="wrap">
     <h2>{size}. {price} a week.</h2>
     <div class="slab">
@@ -590,7 +609,7 @@ def how_it_works():
   </div>
 </section>
 
-<section class="tight">
+<section class="tight shade">
   <div class="wrap">
     <div class="narrow">
     <h2>Common questions</h2>
@@ -901,6 +920,13 @@ def main():
     write("how-it-works.html", how_it_works())
     write("services.html", services())
     write("pricing.html", pricing())
+    if os.path.isdir("assets"):
+        shutil.copytree("assets", os.path.join(OUT, "assets"))
+        print("  copied assets/ ->", os.path.join(OUT, "assets"))
+    else:
+        print("  !! assets/ not found at repo root - logo and favicon will 404.")
+        print("     Stage it before building:  cp -r site/assets ./assets")
+
     write("robots.txt", ROBOTS)
     write("sitemap.xml", sitemap())
     write("llms.txt", LLMS_TXT)
